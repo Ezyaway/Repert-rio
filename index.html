@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Repertório de Violão</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎸 Meu Repertório de Violão</h1>
+            <p class="subtitle">Organize suas músicas e cifras</p>
+        </header>
+
+        <div id="mainView" class="view active">
+            <div class="controls">
+                <button id="addSongBtn" class="btn btn-primary">+ Nova Música</button>
+                <button id="manageChordsBtn" class="btn btn-edit">🎼 Gerenciar Acordes</button>
+                
+                <div class="filters">
+                    <select id="filterType" class="filter-select">
+                        <option value="all">Todas as músicas</option>
+                        <option value="artist">Filtrar por artista</option>
+                        <option value="genre">Filtrar por gênero</option>
+                        <option value="category">Filtrar por categoria</option>
+                    </select>
+                    
+                    <select id="filterValue" class="filter-select" style="display: none;">
+                        <option value="">Selecione...</option>
+                    </select>
+                    
+                    <select id="sortOrder" class="filter-select">
+                        <option value="name-asc">A-Z (Nome)</option>
+                        <option value="name-desc">Z-A (Nome)</option>
+                        <option value="artist-asc">A-Z (Artista)</option>
+                        <option value="artist-desc">Z-A (Artista)</option>
+                        <option value="recent">Mais recentes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="categories-tabs">
+                <button class="category-tab active" data-category="all">Todas</button>
+                <div id="customCategories"></div>
+                <button id="addCategoryBtn" class="category-tab add-category">+</button>
+            </div>
+
+            <div id="songsList" class="songs-list">
+                <div class="empty-state">
+                    <p>📝 Nenhuma música cadastrada ainda.</p>
+                    <p>Clique em "Nova Música" para começar!</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="chordsManagerView" class="view">
+            <div class="form-header">
+                <button id="backToChordsBtn" class="btn btn-secondary">← Voltar</button>
+                <h2>🎼 Gerenciar Acordes</h2>
+            </div>
+
+            <div class="chords-manager">
+                <div class="add-chord-section">
+                    <h3>Adicionar Novo Acorde</h3>
+                    <div class="chord-form">
+                        <input type="text" id="chordName" placeholder="Sigla (ex: Am, F, G7)" maxlength="10">
+                        <textarea id="chordDiagram" rows="8" placeholder="Cole o diagrama do acorde aqui ou descreva a posição&#10;&#10;Exemplo:&#10;e|---0---|&#10;B|---1---|&#10;G|---2---|&#10;D|---2---|&#10;A|---0---|&#10;E|-------|&#10;&#10;Ou apenas: 1ª casa - dedo 1 na 2ª corda"></textarea>
+                        <button id="addChordBtn" class="btn btn-primary">+ Adicionar Acorde</button>
+                    </div>
+                </div>
+
+                <div class="chords-list-section">
+                    <h3>Acordes Cadastrados</h3>
+                    <div id="chordsList" class="chords-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="songDetailView" class="view">
+            <div class="detail-header">
+                <button id="backBtn" class="btn btn-secondary">← Voltar</button>
+                <div class="detail-actions">
+                    <button id="editBtn" class="btn btn-edit">✏️ Editar</button>
+                    <button id="deleteBtn" class="btn btn-danger">🗑️ Excluir</button>
+                </div>
+            </div>
+            
+            <div id="songDetail" class="song-detail"></div>
+        </div>
+
+        <div id="songFormView" class="view">
+            <div class="form-header">
+                <button id="cancelFormBtn" class="btn btn-secondary">← Cancelar</button>
+                <h2 id="formTitle">Nova Música</h2>
+            </div>
+            
+            <form id="songForm" class="song-form">
+                <div class="form-group">
+                    <label for="songName">Nome da Música *</label>
+                    <input type="text" id="songName" required placeholder="Ex: Wonderwall">
+                </div>
+                
+                <div class="form-group">
+                    <label for="songArtist">Artista *</label>
+                    <input type="text" id="songArtist" required placeholder="Ex: Oasis">
+                </div>
+                
+                <div class="form-group">
+                    <label for="songGenre">Gênero</label>
+                    <input type="text" id="songGenre" placeholder="Ex: Rock, MPB, Samba...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="songCategory">Categoria Personalizada</label>
+                    <input type="text" id="songCategory" list="categorySuggestions" placeholder="Ex: Favoritas, Estudando, Dominadas...">
+                    <datalist id="categorySuggestions"></datalist>
+                </div>
+                
+                <div class="form-group">
+                    <label for="songChords">Cifra / Letra com Acordes</label>
+                    <div class="chord-help">
+                        💡 Dica: Digite os acordes entre colchetes. Ex: [Am]Hoje eu [G]quero [F]sair sozinho
+                    </div>
+                    <textarea id="songChords" rows="15" placeholder="Digite a letra e coloque os acordes entre colchetes [Am] onde devem aparecer.&#10;&#10;Exemplo:&#10;[C]Today is gonna be the day&#10;That they're gonna [G]throw it back to [Am]you"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="songTab">Tablatura (opcional)</label>
+                    <textarea id="songTab" rows="8" placeholder="Cole aqui a tablatura em formato texto.&#10;&#10;Exemplo:&#10;e|---0---3---0---|&#10;B|---1---0---1---|&#10;G|---0---0---2---|"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="songRhythm">Ritmo (opcional)</label>
+                    <div class="rhythm-builder">
+                        <div class="rhythm-buttons">
+                            <button type="button" class="rhythm-btn" data-arrow="↓">↓ Baixo</button>
+                            <button type="button" class="rhythm-btn" data-arrow="↑">↑ Cima</button>
+                            <button type="button" class="rhythm-btn" data-arrow="X">X Abafar</button>
+                            <button type="button" class="rhythm-btn" id="clearRhythm">🗑️ Limpar</button>
+                        </div>
+                        <div id="rhythmDisplay" class="rhythm-display"></div>
+                        <input type="hidden" id="songRhythm">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="songSpotify">Link do Spotify (opcional)</label>
+                    <input type="url" id="songSpotify" placeholder="https://open.spotify.com/track/...">
+                    <small>Cole o link completo da música no Spotify</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Salvar Música</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="chordPopup" class="chord-popup" style="display: none;">
+        <div class="chord-popup-content">
+            <button class="chord-popup-close">✕</button>
+            <h3 id="chordPopupTitle"></h3>
+            <div id="chordPopupDiagram" class="chord-popup-diagram"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
