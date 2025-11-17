@@ -74,6 +74,35 @@ class SongManager {
                 this.showChordPopup(e.target.textContent);
             }
         });
+        document.getElementById("exportBtn").addEventListener("click", () => {
+            const exportData = {
+                songs,
+                customCategories,
+                chord,
+            };
+            downloadFile("backup.json", JSON.stringify(exportData, null, 2));
+        });
+        // Botão de importar backup
+        document.getElementById("importBtn").addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    songs = data.songs || [];
+                    customCategories = data.customCategories || [];
+                    chords = data.chords || [];
+                    saveData();   // salva no localStorage
+                    renderSongs();
+                    alert("Dados importados com sucesso!");
+                } catch (error) {
+                    alert("Arquivo inválido ou corrompido.");
+                }
+            };
+            reader.readAsText(file);
+        });
+
     }
 
     loadSongs() {
@@ -649,6 +678,17 @@ class SongManager {
         div.textContent = text;
         return div.innerHTML;
     }
+    
+    function downloadFile(filename, content) {
+        const element = document.createElement("a");
+        const blob = new Blob([content], { type: "application/json" });
+        element.href = URL.createObjectURL(blob);
+        element.download = filename;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
