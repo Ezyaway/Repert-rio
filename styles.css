@@ -132,6 +132,30 @@ h1 {
     background: #5a7a5a;
 }
 
+.btn-export {
+    background: var(--green);
+    color: var(--cream);
+    border: 2px solid var(--dark-brown);
+}
+
+.btn-export:hover {
+    background: #5a7a5a;
+    transform: translateY(-2px);
+    box-shadow: 2px 4px 0 var(--shadow);
+}
+
+.btn-download {
+    background: var(--accent);
+    color: var(--cream);
+    border: 2px solid var(--dark-brown);
+}
+
+.btn-download:hover {
+    background: var(--light-accent);
+    transform: translateY(-2px);
+    box-shadow: 2px 4px 0 var(--shadow);
+}
+
 .btn-secondary {
     background: var(--dark-cream);
 }
@@ -267,6 +291,13 @@ h1 {
 .detail-actions {
     display: flex;
     gap: 10px;
+}
+
+.export-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    flex-wrap: wrap;
 }
 
 .song-detail {
